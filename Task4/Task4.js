@@ -1,4 +1,4 @@
-d3.csv("cleaned_heart_disease1.csv").then(function(data) {
+d3.csv("../cleaned_heart_disease1.csv").then(function(data) {
     // Convert string to numbers
     data.forEach(d => {
       d["Exercise Habits"] = +d["Exercise Habits"]; // 0 = High, 1 = Low, 2 = Medium
@@ -98,7 +98,7 @@ d3.csv("cleaned_heart_disease1.csv").then(function(data) {
   
     const color = d3.scaleOrdinal()
       .domain(subgroups)
-      .range(["#e41a1c", "#377eb8"]);
+      .range([ "#E69F00","#0072B2"]);
   
     // Tooltip
     const tooltip = d3.select("body").append("div").attr("class", "tooltip");
