@@ -1,0 +1,53 @@
+
+    body {
+      font-family: sans-serif;
+      background-color: #f9f9f9;
+      align-items: center;
+    }
+    svg {
+        display: block;
+        margin: 0 auto;
+    }
+
+    h1 {
+        color: #333;
+        text-align: center;
+    }
+    #chart {
+      margin: 40px;
+    }
+    
+    .bar {
+      stroke: #fff;
+    }
+
+    #chart rect {
+      transition: all 0.3s ease;
+  }
+  
+  #chart rect:hover {
+      opacity: 0.6;  /* Giảm opacity để tạo hiệu ứng blur */
+      cursor: pointer;
+      filter: brightness(0.9);  /* Làm tối đi một chút */
+  }
+  
+  .tooltip {
+      position: absolute;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px;
+      border-radius: 4px;
+      font-size: 14px;
+      pointer-events: none;
+      z-index: 100;
+  }
+    .axis-label {
+      font-size: 26px;
+      font-weight: bold;
+    }
+    .axit text {
+        font-size: 16px;
+        font-weight: bold;
+        fill: #333;
+    }
