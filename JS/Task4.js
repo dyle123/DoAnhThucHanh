@@ -118,6 +118,22 @@ d3.csv("../cleaned_heart_disease1.csv").then(function(data) {
       .attr("y", d => y(d[1]))
       .attr("height", d => y(d[0]) - y(d[1]))
       .attr("width", x.bandwidth())
+      .each(function(d) {
+        // Add text label in the middle of each segment
+        const height = y(d[0]) - y(d[1]);
+        if (height > 25) { // Only show text if segment is tall enough
+          const group = d3.select(this.parentNode).datum().key;
+          svg.append("text")
+            .attr("x", x(d.data.habit) + x.bandwidth()/2)
+            .attr("y", y(d[1]) + height/2)
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "left")
+            .style("fill", "white")
+            .style("font-weight", "bold")
+            .style("font-size", "14px")
+            .text(d[1] - d[0]);
+        }
+      })
       .on("mouseover", function(event, d) {
         const group = d3.select(this.parentNode).datum().key;
         tooltip
@@ -145,4 +161,3 @@ d3.csv("../cleaned_heart_disease1.csv").then(function(data) {
         .size("16px");
     });
   }
-  
