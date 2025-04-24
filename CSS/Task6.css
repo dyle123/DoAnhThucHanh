@@ -1,0 +1,35 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#chart svg {
+    display: block;
+    margin: 0 auto;
+}
+
+.quit-btn {
+    display: inline-block;
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#chart {
+    margin: 0 auto;
+    width: 80%;
+}
+
+svg {
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+  }
+  
