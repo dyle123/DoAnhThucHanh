@@ -1,4 +1,4 @@
-d3.csv("5_cleaned_data_file.csv").then(function (data) {
+d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
     const maleData = [];
     const femaleData = [];
 
