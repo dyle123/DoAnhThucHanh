@@ -12,7 +12,7 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
         }
     });
 
-    const width = 900;
+    const width = 1400;
     const height = 600;
     const margin = { top: 40, right: 150, bottom: 70, left: 90 }; // Tăng top/right margin nếu cần
 
@@ -21,26 +21,36 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
         .attr("width", width)
         .attr("height", height);
 
-    // --- 2. Scales và Histogram Generator (giữ nguyên) ---
+    // --- 2. Scales và Histogram Generator ---
     // Tìm min/max thực tế từ dữ liệu đã lọc NaN
     const allCholesterol = [...maleData, ...femaleData];
-    const xMin = d3.min(allCholesterol);
+    const xMin = d3.min(allCholesterol); // Vẫn cần để biết dữ liệu bắt đầu từ đâu
     const xMax = d3.max(allCholesterol);
 
     const x = d3.scaleLinear()
-        .domain([xMin, xMax]).nice() // .nice() để làm tròn domain trục X
+        // Chỉnh domain để bắt đầu từ 0
+        .domain([0, xMax]).nice()
         .range([margin.left, width - margin.right]);
+
+    // Định nghĩa thresholds cố định cho các bin (ví dụ: bin rộng 10 đơn vị)
+    // Bắt đầu từ 0 và kết thúc tại giá trị lớn nhất + kích thước bin
+    const binThresholds = d3.range(0, xMax + 10, 10); // Tạo ranh giới các bin: 0, 10, 20, ... , xMax
 
     const histogram = d3.histogram()
         .value(d => d)
-        .domain(x.domain()) // Dùng domain đã nice() của trục X
-        .thresholds(x.ticks(20)); // Khoảng 20 bins, D3 sẽ tự điều chỉnh thresholds đẹp hơn
+        // Domain của histogram generator vẫn dùng domain từ 0 để tính toán trên toàn bộ phạm vi
+        .domain([0, xMax])
+        // Chỉ định thresholds TƯỜNG MINH để kiểm soát kích thước bin
+        .thresholds(binThresholds);
 
     const maleBins = histogram(maleData);
     const femaleBins = histogram(femaleData);
 
+    // Tìm max count từ cả hai bộ bin mới
+    const yMax = d3.max([...maleBins, ...femaleBins], d => d.length);
+
     const y = d3.scaleLinear()
-        .domain([0, d3.max([...maleBins, ...femaleBins], d => d.length)]).nice() // .nice() cho trục Y
+        .domain([0, yMax]).nice() // .nice() cho trục Y
         .range([height - margin.bottom, margin.top]);
 
     // --- 3. Tooltip Div và Handlers ---
@@ -63,6 +73,7 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
         // Truy cập count từ paired data
         const count = isMale ? d.maleCount : d.femaleCount;
         // Lấy khoảng giá trị của bin (làm tròn cho dễ đọc nếu cần)
+        // Sử dụng d.x0 và d.x1 từ pairedBin data
         const binRange = `[${Math.round(d.x0)} - ${Math.round(d.x1)})`;
 
         tooltip
@@ -85,19 +96,24 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
     // --- 4 & 5. Tạo Paired Bins và Vẽ Overlapping Histograms với thanh thấp hơn ở trên ---
 
     // Kết hợp dữ liệu maleBins và femaleBins dựa trên bin
+    // maleBins và femaleBins bây giờ đã có cùng cấu trúc bin (rộng 10 đơn vị)
     const pairedBins = maleBins.map((maleBin, i) => {
         const femaleBin = femaleBins[i];
         return {
-            x0: maleBin.x0, // Bắt đầu khoảng
-            x1: maleBin.x1, // Kết thúc khoảng
+            x0: maleBin.x0, // Bắt đầu khoảng bin
+            x1: maleBin.x1, // Kết thúc khoảng bin
             maleCount: maleBin.length, // Số lượng nam trong bin
             femaleCount: femaleBin.length // Số lượng nữ trong bin
         };
     });
 
-    // Tạo một nhóm (g) cho mỗi bin
+    // Lọc bỏ các pairedBins có cả maleCount và femaleCount bằng 0
+    const filteredPairedBins = pairedBins.filter(d => d.maleCount > 0 || d.femaleCount > 0);
+
+
+    // Tạo một nhóm (g) cho mỗi bin có dữ liệu
     const binGroups = svg.selectAll(".bin-group")
-        .data(pairedBins)
+        .data(filteredPairedBins) // Sử dụng dữ liệu đã lọc
         .enter().append("g")
         .attr("class", "bin-group");
 
@@ -142,14 +158,14 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
     // Chọn tất cả các thanh rect bên trong các nhóm bin-group
     svg.selectAll(".bin-group rect")
         .on("mouseover", mouseover)
-        .on("mousemove", mousemove) // Hàm mousemove đã được điều chỉnh để lấy data từ pairedBin
+        .on("mousemove", mousemove)
         .on("mouseleave", mouseleave);
 
 
     // --- 6. Vẽ trục X ---
     svg.append("g")
         .attr("transform", `translate(0, ${height - margin.bottom})`)
-        .call(d3.axisBottom(x))
+        .call(d3.axisBottom(x)) // Trục X vẫn dùng scale x có domain từ 0
         .selectAll("text")
         .attr("class", "tick-text"); // Áp dụng class cho tick text
         // Bỏ xoay và chỉnh font ở đây nếu muốn dùng CSS
@@ -162,11 +178,11 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
         .attr("class", "tick-text"); // Áp dụng class
 
 
-    // --- 8. Labels (giữ nguyên) ---
+    // --- 8. Labels (giữ nguyên vị trí bạn đã chỉnh) ---
     // X label
     svg.append("text")
         .attr("class", "axis-label") // Dùng class
-        .attr("x", width / 2.1)
+        .attr("x", width / 2)
         .attr("y", height - 10) // Điều chỉnh Y nếu cần
         .attr("text-anchor", "middle")
         .text("Cholesterol Level");
@@ -181,7 +197,7 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
         .text("Number of Patients");
 
 
-    // --- 9. Legend (giữ nguyên, có thể chỉnh sửa style qua class) ---
+    // --- 9. Legend (giữ nguyên style bạn đã chỉnh) ---
     const legend = svg.append("g")
         .attr("transform", `translate(${width - margin.right + 40}, ${margin.top})`); // Điều chỉnh vị trí
 
