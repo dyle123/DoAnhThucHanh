@@ -1,5 +1,5 @@
 // Load dữ liệu và xử lý
-d3.csv("../cleaned_heart_disease1.csv", d3.autoType).then(data => {
+d3.csv("../5_cleaned_heart_disease1.csv", d3.autoType).then(data => {
     //Nhóm dữ liệu theo nhóm cholesterol, đếm số người theo trạng thái bệnh
     const grouped = d3.rollups(
       data,

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grouped Bar Chart - Heart Disease</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="../CSS/5_D3.css">
+    <link rel="stylesheet" href="../CSS/5_general.css">
+</head>
+<body>
+    <a href="../5_index.html" class="quit-btn">Quit</a>
+    <h1>Gender correlates with heart disease prevalence</h1>
+    <div id="chart-container">
+        <svg id="chart" width="1000" height="600"></svg>
+    </div>
+    <script src="../JS/5_Chart.js"></script>
+    <script>
+        drawTask2Chart("../5_cleaned_heart_disease1.csv")
+    </script>
+    <!-- <button class="Task3">Task 3</button>
+    <button onclick="window.location.href='Task1.html'" class="Task1">Task 1</button> -->
+</body>
+</html>

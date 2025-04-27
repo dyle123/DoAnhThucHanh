@@ -75,6 +75,6 @@ for col in cat_cols:
     df[col] = encoder.fit_transform(df[col])
 
 # Lưu dữ liệu đã xử lý
-df.to_csv("cleaned_heart_disease1.csv", index=False)
+df.to_csv("5_cleaned_heart_disease1.csv", index=False)
 
-print("\n✅ Tiền xử lý dữ liệu hoàn tất! Dữ liệu đã được lưu vào 'cleaned_heart_disease.csv'.")
+print("\n✅ Tiền xử lý dữ liệu hoàn tất! Dữ liệu đã được lưu vào '5_cleaned_heart_disease1.csv'.")

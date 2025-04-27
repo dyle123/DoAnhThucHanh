@@ -1,5 +1,5 @@
 // Load và xử lý dữ liệu từ csv
-d3.csv("../cleaned_heart_disease1.csv").then(data => {
+d3.csv("../5_cleaned_heart_disease1.csv").then(data => {
     data.forEach(d => {
         d.BMI = +d.BMI;
         d.HeartDisease = +d["Heart Disease Status"];

@@ -1,5 +1,5 @@
 // Đọc dữ liệu từ file CSV
-d3.csv("../cleaned_heart_disease1.csv").then(function(data) {
+d3.csv("../5_cleaned_heart_disease1.csv").then(function(data) {
     // Chuyển đổi dữ liệu từ chuỗi sang số
     data.forEach(d => {
         d.Smoking = +d.Smoking;  // 0: Không hút thuốc, 1: Hút thuốc

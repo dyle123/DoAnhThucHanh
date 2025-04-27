@@ -1,4 +1,4 @@
-d3.csv("../cleaned_heart_disease1.csv").then(function(data) {
+d3.csv("../5_cleaned_heart_disease1.csv").then(function(data) {
     // Convert string to numbers
     data.forEach(d => {
       d["Exercise Habits"] = +d["Exercise Habits"]; // 0 = High, 1 = Low, 2 = Medium
