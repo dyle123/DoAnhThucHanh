@@ -15,19 +15,23 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
     const height = 600;
     const margin = { top: 30, right: 100, bottom: 70, left: 90 };
 
+
+
     const svg = d3.select("#chart")
         .append("svg")
         .attr("width", width)
         .attr("height", height);
 
     const x = d3.scaleLinear()
-        .domain([d3.min(data, d => +d["Cholesterol Level"]), d3.max(data, d => +d["Cholesterol Level"])])
-        .range([margin.left, width - margin.right]);
+        .domain([150, d3.max(data, d => +d["Cholesterol Level"])])
+        .range([margin.left, width - margin.right])
+        .nice();
 
     const histogram = d3.histogram()
         .value(d => d)
         .domain(x.domain())
-        .thresholds(x.ticks(20)); // 20 bins
+        .thresholds(d3.range(150, d3.max(data, d => +d["Cholesterol Level"]) + 10, 10))
+
 
     const maleBins = histogram(maleData);
     const femaleBins = histogram(femaleData);
@@ -46,7 +50,8 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
         .attr("width", d => x(d.x1) - x(d.x0) - 2)
         .attr("height", d => y(0) - y(d.length))
         .attr("fill", "#4da6ff")
-        .attr("opacity", 0.6);
+        .attr("opacity", 0.6)
+
 
     // Draw female histogram
     svg.selectAll(".bar-female")
@@ -58,12 +63,14 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
         .attr("width", d => x(d.x1) - x(d.x0) - 2)
         .attr("height", d => y(0) - y(d.length))
         .attr("fill", "deeppink")
-        .attr("opacity", 0.5);
+        .attr("opacity", 0.5)
 
     // X axis
     svg.append("g")
         .attr("transform", `translate(0, ${height - margin.bottom})`)
-        .call(d3.axisBottom(x))
+        .call(d3.axisBottom(x)
+            .tickValues(d3.range(150, d3.max(data, d => +d["Cholesterol Level"]) + 10, 10))
+        )
         .selectAll("text")
         .style("font-size", "18px");
 
