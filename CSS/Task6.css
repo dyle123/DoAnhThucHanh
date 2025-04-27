@@ -5,8 +5,8 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* căn giữa theo chiều dọc */
-    align-items: center;     /* căn giữa theo chiều ngang */
+    justify-content: center; 
+    align-items: center;  
     background-color: #f8f9fa;
 }
 

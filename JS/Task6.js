@@ -19,7 +19,6 @@ d3.csv("../cleaned_heart_disease1.csv").then(data => {
             rate: total > 0 ? diseaseCount / total : 0 
         };
     });
-
     // Tạo SVG
     const svg = d3.select("#chart").append("svg")
         .attr("width", 800)
