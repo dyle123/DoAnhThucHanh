@@ -21,8 +21,8 @@ d3.csv("../cleaned_heart_disease1.csv").then(data => {
     });
 // Tạo SVG
     const svg = d3.select("#chart").append("svg")
-        .attr("width", 800)
-        .attr("height", 500);
+        .attr("width", 900)
+        .attr("height", 600);
 // Các số liệu về lề, kích thước biểu đồ,...
     const margin = { top: 50, right: 50, bottom: 50, left: 60 };
     const width = +svg.attr("width") - margin.left - margin.right;

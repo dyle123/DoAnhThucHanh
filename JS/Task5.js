@@ -26,7 +26,7 @@ d3.csv("../cleaned_heart_disease1.csv", d3.autoType).then(data => {
     });
 //Các thông số chung về kích thước, lề, hiển thị thông tin, màu sắc,...
 const svg = d3.select("svg");
-const margin = { top: 40, right: 20, bottom: 60, left: 60 };
+const margin = { top: 100, right: 20, bottom: 60, left: 60 };
 const width = +svg.attr("width") - margin.left - margin.right;
 const height = +svg.attr("height") - margin.top - margin.bottom;
 const chart = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);

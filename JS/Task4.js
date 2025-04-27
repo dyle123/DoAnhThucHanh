@@ -36,9 +36,9 @@ d3.csv("../cleaned_heart_disease1.csv").then(function(data) {
     //       width = 1200 - margin.left - margin.right - 20,
     //       height = 600 - margin.top - margin.bottom;
   
-    const margin = { top: 50, right: 30, bottom: 100, left: 100 }; // <-- Tăng bottom từ 50 → 100
-          const width = 1200;
-          const height = 600; // giữ nguyên chiều cao phần vẽ
+    const margin = { top: 80, right: 150, bottom: 100, left: 100 }; // <-- Tăng bottom từ 50 → 100
+          const width = 1000;
+          const height = 500; // giữ nguyên chiều cao phần vẽ
 
     const svg = d3.select("#chart")
       .append("svg")

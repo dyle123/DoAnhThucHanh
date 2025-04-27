@@ -11,6 +11,7 @@ body {
   }
   
   svg {
+    margin-top: 160px;
     border: 1px solid #ccc;
     display: flex;
     justify-content: center;
