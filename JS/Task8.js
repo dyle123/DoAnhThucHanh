@@ -14,7 +14,7 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
 
     const width = 1400;
     const height = 600;
-    const margin = { top: 40, right: 150, bottom: 70, left: 90 }; // Tăng top/right margin nếu cần
+    const margin = { top: 40, right: 150, bottom: 70, left: 90 }; 
 
     const svg = d3.select("#chart")
         .append("svg")
@@ -22,25 +22,21 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
         .attr("height", height);
 
     // --- 2. Scales và Histogram Generator ---
-    // Tìm min/max thực tế từ dữ liệu đã lọc NaN
     const allCholesterol = [...maleData, ...femaleData];
-    const xMin = d3.min(allCholesterol); // Vẫn cần để biết dữ liệu bắt đầu từ đâu
+
     const xMax = d3.max(allCholesterol);
 
     const x = d3.scaleLinear()
-        // Chỉnh domain để bắt đầu từ 0
+
         .domain([0, xMax]).nice()
         .range([margin.left, width - margin.right]);
 
-    // Định nghĩa thresholds cố định cho các bin (ví dụ: bin rộng 10 đơn vị)
-    // Bắt đầu từ 0 và kết thúc tại giá trị lớn nhất + kích thước bin
+
     const binThresholds = d3.range(0, xMax + 10, 10); // Tạo ranh giới các bin: 0, 10, 20, ... , xMax
 
     const histogram = d3.histogram()
         .value(d => d)
-        // Domain của histogram generator vẫn dùng domain từ 0 để tính toán trên toàn bộ phạm vi
         .domain([0, xMax])
-        // Chỉ định thresholds TƯỜNG MINH để kiểm soát kích thước bin
         .thresholds(binThresholds);
 
     const maleBins = histogram(maleData);
@@ -50,7 +46,7 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
     const yMax = d3.max([...maleBins, ...femaleBins], d => d.length);
 
     const y = d3.scaleLinear()
-        .domain([0, yMax]).nice() // .nice() cho trục Y
+        .domain([0, yMax]).nice() 
         .range([height - margin.bottom, margin.top]);
 
     // --- 3. Tooltip Div và Handlers ---
@@ -72,8 +68,7 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
         const genderText = isMale ? "Male" : "Female";
         // Truy cập count từ paired data
         const count = isMale ? d.maleCount : d.femaleCount;
-        // Lấy khoảng giá trị của bin (làm tròn cho dễ đọc nếu cần)
-        // Sử dụng d.x0 và d.x1 từ pairedBin data
+    
         const binRange = `[${Math.round(d.x0)} - ${Math.round(d.x1)})`;
 
         tooltip
@@ -89,14 +84,12 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
         // Xác định opacity gốc dựa trên class
         const originalOpacity = element.classed("bar-male") ? 0.6 : 0.5;
         element
-            .style("stroke", "none") // Bỏ viền đen
+            .style("stroke", "none") 
             .style("opacity", originalOpacity); // Trả về độ mờ ban đầu
     };
 
     // --- 4 & 5. Tạo Paired Bins và Vẽ Overlapping Histograms với thanh thấp hơn ở trên ---
 
-    // Kết hợp dữ liệu maleBins và femaleBins dựa trên bin
-    // maleBins và femaleBins bây giờ đã có cùng cấu trúc bin (rộng 10 đơn vị)
     const pairedBins = maleBins.map((maleBin, i) => {
         const femaleBin = femaleBins[i];
         return {
@@ -165,25 +158,24 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
     // --- 6. Vẽ trục X ---
     svg.append("g")
         .attr("transform", `translate(0, ${height - margin.bottom})`)
-        .call(d3.axisBottom(x)) // Trục X vẫn dùng scale x có domain từ 0
+        .call(d3.axisBottom(x)) 
         .selectAll("text")
-        .attr("class", "tick-text"); // Áp dụng class cho tick text
-        // Bỏ xoay và chỉnh font ở đây nếu muốn dùng CSS
-
+        .attr("class", "tick-text"); 
+        
     // --- 7. Vẽ trục Y ---
     svg.append("g")
         .attr("transform", `translate(${margin.left}, 0)`)
         .call(d3.axisLeft(y))
         .selectAll("text")
-        .attr("class", "tick-text"); // Áp dụng class
+        .attr("class", "tick-text"); 
 
 
-    // --- 8. Labels (giữ nguyên vị trí bạn đã chỉnh) ---
+    // --- 8. Labels 
     // X label
     svg.append("text")
         .attr("class", "axis-label") // Dùng class
         .attr("x", width / 2)
-        .attr("y", height - 10) // Điều chỉnh Y nếu cần
+        .attr("y", height - 10) 
         .attr("text-anchor", "middle")
         .text("Cholesterol Level");
 
@@ -192,12 +184,12 @@ d3.csv("../cleaned_heart_disease1.csv").then(function (data) {
         .attr("class", "axis-label") // Dùng class
         .attr("transform", "rotate(-90)")
         .attr("x", -height / 2)
-        .attr("y", 25) // Điều chỉnh Y nếu cần
+        .attr("y", 25) 
         .attr("text-anchor", "middle")
         .text("Number of Patients");
 
 
-    // --- 9. Legend (giữ nguyên style bạn đã chỉnh) ---
+    // --- 9. Legend
     const legend = svg.append("g")
         .attr("transform", `translate(${width - margin.right + 40}, ${margin.top})`); // Điều chỉnh vị trí
 
