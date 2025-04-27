@@ -303,12 +303,12 @@ function drawTask9(csvFile) {
 
         data.forEach(d => {
             const age = +d["Age"];
-            const ageGroup =
-                age < 30 ? "20-30" :
-                    age < 40 ? "30-40" :
-                        age < 50 ? "40-50" :
-                            age < 60 ? "50-60" :
-                                age < 70 ? "60-70" : "70-80";
+            const ageGroup = 
+                age < 30 ? "18-29" :
+                age < 40 ? "30-39" :
+                age < 50 ? "40-49" :
+                age < 60 ? "50-59" :
+                age < 70 ? "60-69" : "70-80";
 
             const key = `${d["Smoking"]}_${d["Alcohol Consumption"]}_${d["Exercise Habits"]}_${ageGroup}`;
             const hasDisease = d["Heart Disease Status"] === "1" ? 1 : 0;
